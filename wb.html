@@ -1,0 +1,47 @@
+<html>
+<head>
+    <style>
+        body {
+            background-color: black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .text {
+            color: white;
+            text-align: center;
+            font-size: 1.25rem; /* 20px */
+            line-height: 1.75rem; /* 28px */
+            animation: blink 1s steps(1, start) infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div id="text" class="text">
+        <p>Kalo Ada yang</p>
+        <p>Harus Di izinkan</p>
+        <p>Izinkan Saja biar web kaga</p>
+        <p>eror</p>
+    </div>
+
+    <script>
+        let blinkCount = 0;
+        const maxBlinks = 5;
+        const blinkDuration = 1000; // 1 second
+
+        const interval = setInterval(() => {
+            blinkCount++;
+            if (blinkCount >= maxBlinks) {
+                clearInterval(interval);
+                window.location.href = "bkp.html"; // Change this to your target HTML page
+            }
+        }, blinkDuration);
+    </script>
+</body>
+</html>

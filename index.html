@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+    <title>Responsive Webpage</title>
+    <style>
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        @keyframes scroll {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        @keyframes colorChange {
+            0% { color: red; }
+            25% { color: blue; }
+            50% { color: green; }
+            75% { color: yellow; }
+            100% { color: red; }
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+        }
+        body {
+            background-color: black;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+        .header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: white;
+            text-align: center;
+            padding: 10px 0;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .scrolling {
+            display: inline-block;
+            font-size: 24px;
+            font-weight: bold;
+            animation: scroll 10s linear infinite, colorChange 3s infinite alternate, blink 1s infinite;
+        }
+        .content {
+            text-align: center;
+        }
+        .content p {
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            font-style: italic;
+        }
+        .image-container {
+            margin-top: 20px;
+            border: 4px solid red;
+            max-width: 300px;
+            cursor: pointer;
+        }
+        .image-container img {
+            width: 100%;
+            height: auto;
+        }
+        .age-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+        }
+        .age-box {
+            background: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 10px;
+        }
+        .age-box button {
+            margin: 10px;
+            padding: 12px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+    </style>
+    <script>
+        function askAge() {
+            document.getElementById("ageModal").style.display = "flex";
+        }
+        function checkAge(age) {
+            if (age >= 18) {
+                window.location.href = "wb.html";
+            } else {
+                navigator.vibrate(300);
+                document.getElementById("ageBox").style.animation = "shake 0.5s";
+                setTimeout(() => {
+                    document.getElementById("ageBox").style.animation = "";
+                    document.getElementById("ageModal").style.display = "none";
+                }, 500);
+            }
+        }
+    </script>
+    <link href="wb.html" rel="stylesheet"/>
+</head>
+<body>
+    <div class="header">
+        <span class="scrolling">
+            <i class="fas fa-lock"></i> Husus Orng Dewasa
+        </span>
+    </div>
+    <div class="content">
+        <p>Ingin Nonton Klik gambar</p>
+        <p>       ⬇⬇⬇⬇      </P>
+        <div class="image-container" onclick="askAge()">
+            <img src="tbr.jpg" alt="Anime character"/>
+        </div>
+    </div>
+    <div id="ageModal" class="age-modal">
+        <div id="ageBox" class="age-box">
+            <p>Berpa umur anda :</p>
+            <button onclick="checkAge(14)">14 Tahun</button>
+            <button onclick="checkAge(18)">18 Tahun</button>
+            <button onclick="checkAge(23)">23 Tahun</button>
+        </div>
+    </div>
+</body>
+</html>
